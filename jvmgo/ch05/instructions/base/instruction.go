@@ -38,3 +38,14 @@ type Index8Instruction struct {
 		self.Index = uint(reader.ReadUint8())
 	}
 }
+
+// 有些指令需要访问运行时常量池，常量池索引由两字节操
+作数给出
+type Index16Instruction struct {
+	// 局部变量表索引
+	Index uint
+	// 读取16位的索引，然后转换为uint
+	func (self *Index16Instruction) FetchOperands(reader *BytecodeReader) {
+		self.Index = uint(reader.ReadUint16())
+	}
+}
