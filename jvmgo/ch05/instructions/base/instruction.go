@@ -39,8 +39,7 @@ type Index8Instruction struct {
 	}
 }
 
-// 有些指令需要访问运行时常量池，常量池索引由两字节操
-作数给出
+// 有些指令需要访问运行时常量池，常量池索引由两字节操作数给出
 type Index16Instruction struct {
 	// 局部变量表索引
 	Index uint
