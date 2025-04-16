@@ -12,6 +12,14 @@ func NewThread() *Thread {
 	}
 }
 
+func (self *Thread) PC() int {
+	return self.pc
+}
+
+func (self *Thread) SetPC(pc int) {
+	self.pc = pc
+}
+
 func (self *Thread) PushFrame(frame *Frame){
 	self.stack.push(frame)
 }
@@ -25,6 +33,9 @@ func (self *Thread) CurrentFrame() *Frame {
 }
 
 
+func (self *Thread) NewFrame(maxLocals, maxStack uint) *Frame {
+	return newFrame(self, maxLocals, maxStack)
+}
 
 
 

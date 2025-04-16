@@ -1,7 +1,7 @@
 package main
 
 import "fmt"
-//import "strings"
+import "strings"
 import "jvmgo/ch05/classfile"
 import "jvmgo/ch05/classpath"
 import "jvmgo/ch05/rtda"
@@ -18,16 +18,32 @@ func main() {
 	}
 }
 
-func startJVM(cmd *Cmd) {
-	// cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
-	// className := strings.Replace(cmd.class, ".", "/", -1)
-	// cf := loadClass(className, cp)
-	// fmt.Println(cmd.class)
-	// printClassInfo(cf)
 
-	frame := rtda.NewFrame(100,100)
-	testLocalVars(frame.LocalVars())
-	testOperandStack(frame.OperandStack())
+/**
+ startJVM（）首先调用loadClass（）方法读取并解析class文件，然
+后调用getMainMethod（）函数查找类的main（）方法，最后调用
+interpret（）函数解释执行main（）方法。
+*/
+func startJVM(cmd *Cmd) {
+	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
+	className := strings.Replace(cmd.class, ".", "/", -1)
+	cf := loadClass(className, cp)
+	mainMethod := getMainMethod(cf)
+
+	if(mainMethod != nil){
+		interpret(mainMethod)
+	}else{
+		fmt.Println("main method not found in class %s\n!", cmd.class)
+	}
+}
+
+func getMainMethod(cf *classfile.ClassFile) *classfile.MemberInfo {
+	for _, m := range cf.Methods() {
+		if m.Name() == "main" && m.Descriptor() == "([Ljava/lang/String;)V" {
+			return m
+		}
+	}
+	return nil
 }
 
 func testLocalVars(vars rtda.LocalVars) {

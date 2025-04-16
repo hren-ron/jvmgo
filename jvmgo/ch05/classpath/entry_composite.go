@@ -3,8 +3,11 @@ package classpath
 import "errors"
 import "strings"
 
+// CompositeEntry由更小的Entry组成，正好可以表示成[]Entry
 type CompositeEntry []Entry
 
+
+//构造函数把参数（路径列表）按分隔符分成小路径，然后把每个小路径都转换成具体的Entry实例
 func newCompositeEntry(pathList string) CompositeEntry {
 	compositeEntry := []Entry{}
 

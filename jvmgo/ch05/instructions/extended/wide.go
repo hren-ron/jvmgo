@@ -77,7 +77,7 @@ func (self *WIDE) FetchOperands(reader *base.BytecodeReader) {
 	case 0x84: // iinc
 		inst := &math.IINC{}
 		inst.Index = uint(reader.ReadUint16())
-		inst.Const = int(reader.ReadInt16())
+		inst.Const = int32(reader.ReadInt16())
 		self.modifiedInstruction = inst
 	case 0xa9: // ret
 		panic("Unsupported opcode: 0xa9!")

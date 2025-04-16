@@ -3,6 +3,11 @@ package classpath
 import "os"
 import "path/filepath"
 
+/**
+ Classpath结构体有三个字段，分别存放三种类路径。Parse（）函
+数使用-Xjre选项解析启动类路径和扩展类路径，使用-classpath/-cp
+选项解析用户类路径
+*/
 type Classpath struct {
 	bootClasspath Entry
 	extClasspath  Entry
@@ -16,6 +21,7 @@ func Parse(jreOption, cpOption string) *Classpath {
 	return cp
 }
 
+
 func (self *Classpath) parseBootAndExtClasspath(jreOption string) {
 	jreDir := getJreDir(jreOption)
 
@@ -28,6 +34,13 @@ func (self *Classpath) parseBootAndExtClasspath(jreOption string) {
 	self.extClasspath = newWildcardEntry(jreExtPath)
 }
 
+
+/*
+
+优先使用用户输入的-Xjre选项作为jre目录。如果没有输入该
+选项，则在当前目录下寻找jre目录。如果找不到，尝试使用
+JAVA_HOME环境变量。
+*/
 func getJreDir(jreOption string) string {
 	if jreOption != "" && exists(jreOption) {
 		return jreOption
@@ -50,6 +63,7 @@ func exists(path string) bool {
 	return true
 }
 
+//如果用户没有提供-classpath/-cp选项，则使用当前目录作为用户类路径。
 func (self *Classpath) parseUserClasspath(cpOption string) {
 	if cpOption == "" {
 		cpOption = "."
@@ -57,6 +71,11 @@ func (self *Classpath) parseUserClasspath(cpOption string) {
 	self.userClasspath = newEntry(cpOption)
 }
 
+
+/**
+ReadClass（）方法依次从启动类路径、扩展类路径和用户
+类路径中搜索class文件
+*/
 // className: fully/qualified/ClassName
 func (self *Classpath) ReadClass(className string) ([]byte, Entry, error) {
 	className = className + ".class"

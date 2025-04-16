@@ -3,14 +3,14 @@ package control
 import "jvmgo/ch05/instructions/base"
 import "jvmgo/ch05/rtda"
 
-type LOOKUPSWITCH struct {
+type LOOKUP_SWITCH struct {
 	defaultOffset int32
 	npairs        int32
 	matchOffsets  []int32
 }
 
 
-func (self *LOOKUPSWITCH) FetchOperands(reader *base.BytecodeReader) {
+func (self *LOOKUP_SWITCH) FetchOperands(reader *base.BytecodeReader) {
 	reader.SkipPadding()
 	self.defaultOffset = reader.ReadInt32()
 	self.npairs = reader.ReadInt32()
@@ -24,7 +24,7 @@ matchOffsets，看是否能找到匹配的key。如果能，则按照value给出
 偏移量跳转，否则按照defaultOffset跳转。
 */
 
-func (self *LOOKUPSWITCH) Execute(frame *rtda.Frame) {
+func (self *LOOKUP_SWITCH) Execute(frame *rtda.Frame) {
 	index := frame.OperandStack().PopInt()
 	var offset int
 	for i := int32(0); i < self.npairs*2; i += 2 {
@@ -34,5 +34,5 @@ func (self *LOOKUPSWITCH) Execute(frame *rtda.Frame) {
 			return
 		}
 	}
-	frame.Branch(frame, self.defaultOffset)
+	base.Branch(frame, int(self.defaultOffset))
 }

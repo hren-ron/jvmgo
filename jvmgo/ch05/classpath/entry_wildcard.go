@@ -4,6 +4,12 @@ import "os"
 import "path/filepath"
 import "strings"
 
+
+/**
+
+首先把路径末尾的星号去掉，得到baseDir，然后调用filepath包
+的Walk（）函数遍历baseDir创建ZipEntry。
+*/
 func newWildcardEntry(path string) CompositeEntry {
 	baseDir := path[:len(path)-1] // remove *
 	compositeEntry := []Entry{}
