@@ -3,6 +3,9 @@ package classfile
 import "fmt"
 import "unicode/utf16"
 
+
+//  CONSTANT_Utf8_info常量里放的是MUTF-8编码的字符串
+// 字符串在class文件中是以MUTF-8（Modified UTF-8）方式编码的。
 /*
 CONSTANT_Utf8_info {
     u1 tag;
@@ -14,6 +17,7 @@ type ConstantUtf8Info struct {
 	str string
 }
 
+//  readInfo（）方法先读取出[]byte，然后调用decodeMUTF8（）函数把它解码成Go字符串
 func (self *ConstantUtf8Info) readInfo(reader *ClassReader) {
 	length := uint32(reader.readUint16())
 	bytes := reader.readBytes(length)
