@@ -58,6 +58,7 @@ func (self *MemberInfo) AccessFlags() uint16 {
 }
 
 
+
 //从常量池查找字段或方法名
 func (self *MemberInfo) Name() string {
 	return self.cp.getUtf8(self.nameIndex)
@@ -78,3 +79,12 @@ func (self *MemberInfo) CodeAttribute() *CodeAttribute {
 	return nil
 }
 
+func (self *MemberInfo) ConstantValueAttribute() *ConstantValueAttribute {
+	for _, attr := range self.attributes {
+		switch attr.(type) {
+		case *ConstantValueAttribute:
+			return attr.(*ConstantValueAttribute)
+		}
+	}
+	return nil
+}
