@@ -1,6 +1,8 @@
 package classfile
 
 /*
+
+Exceptions是变长属性，记录方法抛出的异常表，
 Exceptions_attribute {
     u2 attribute_name_index;
     u4 attribute_length;

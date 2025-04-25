@@ -1,6 +1,14 @@
 package classfile
 
+
 /*
+
+Code是变长属性，只存在于method_info结构中。Code属性中存
+放字节码等方法相关信息。
+
+ max_stack给出操作数栈的最大深度，max_locals给出局部变量
+表大小。接着是字节码，存在u1表中。最后是异常处理表和属性
+表。
 Code_attribute {
     u2 attribute_name_index;
     u4 attribute_length;
