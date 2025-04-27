@@ -103,3 +103,40 @@ func (self *Class) IsEnum() bool {
 	return 0 != self.accessFlags&ACC_ENUM
 }
 
+
+/**
+也就是说，如果类D想访问类C，需要满足两个条件之一：C是
+public，或者C和D在同一个运行时包内。
+*/
+func (self *Class) isAccessibleTo(other *Class) bool {
+	return self.IsPublic() ||
+		self.GetPackageName() == other.GetPackageName()
+}
+
+/**
+比如类名是java/lang/Object，则它的包名就是java/lang。如果类
+定义在默认包中，它的包名是空字符串。
+
+*/
+func (self *Class) GetPackageName() string {
+	if i := lastIndexOf(self.name, '/'); i >= 0 {
+		return self.name[:i]
+	}
+	return ""
+}
+
+func (self *Class) NewObject() *Object {
+	return newObject(self)
+}
+
+/**
+新创建对象的实例变量都应该赋好初始值，不过并不需要做
+额外的工作
+*/
+func newObject(class *Class) *Object {
+	return &Object{
+		class:  class,
+		fields: newSlots(class.instanceSlotCount),
+	}
+}
+

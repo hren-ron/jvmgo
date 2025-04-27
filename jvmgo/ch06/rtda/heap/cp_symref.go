@@ -19,3 +19,32 @@ type SymRef struct {
 	className   string // 类名
 	class       *Class
 }
+
+
+/**
+如果类符号引用已经解析，ResolvedClass（）方法直接返回类指
+针，否则调用resolveClassRef（）方法进行解析。
+*/
+func (self *SymRef) ResolveClass() *Class {
+	if self.class == nil {
+		self.resolveClassRef()
+	}
+	return self.class
+}
+
+/***
+解析类符号引用的过程非常简单，就是根据类名从运行时常量池中
+查找类数据，并调用类加载器加载类。
+通俗地讲，如果类D通过符号引用N引用类C的话，要解析N，
+先用D的类加载器加载C，然后检查D是否有权限访问C，如果没
+有，则抛出IllegalAccessError异常。
+*/
+func (self *SymRef) resolveClassRef() {
+	d := self.cp.class
+	c := d.loader.LoadClass(self.className)
+	if !c.isAccessibleTo(d) {
+		panic("java.lang.IllegalAccessError")
+	}
+	self.class = c
+}
+
