@@ -25,7 +25,7 @@ func NewClassLoader(cp *classpath.Classpath) *ClassLoader {
 	}
 }
 
-// 法把类数据加载到方法区
+// 把类数据加载到方法区
 
 /***
 先查找classMap，看类是否已经被加载。如果是，直接返回类
@@ -65,11 +65,11 @@ func (self *ClassLoader) loadNonArrayClass(className string) *Class {
 
 */
 func (self *ClassLoader) readClass(className string) ([]byte, classpath.Entry) {
-	data, err := self.cp.ReadClass(className)
+	data, entry, err := self.cp.ReadClass(className)
 	if err != nil {
 		panic("java.lang.ClassNotFoundException: " + className)
 	}
-	return data, self.cp.String()
+	return data, entry
 }
 
 /**

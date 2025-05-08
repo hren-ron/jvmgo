@@ -11,11 +11,11 @@ package heap
 import "jvmgo/ch06/classfile"
 
 type ClassMember struct {
-	// 类成员访问标志
+	// 成员访问标志
 	accessFlags uint16
-	// 类名字
+	// 名字
 	name        string
-	// 类描述符
+	// 描述符
 	descriptor  string
 	// class字段存放Class结构体指针，这样可以通过字段或方法访问到它所属的类。
 	class       *Class
