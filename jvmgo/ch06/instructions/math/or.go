@@ -1,8 +1,9 @@
 package math
 
-import "jvmgo/ch05/instructions/base"
-import "jvmgo/ch05/rtda"
+import "jvmgo/ch06/instructions/base"
+import "jvmgo/ch06/rtda"
 
+// Boolean OR int
 type IOR struct{ base.NoOperandsInstruction }
 
 func (self *IOR) Execute(frame *rtda.Frame) {
@@ -13,6 +14,7 @@ func (self *IOR) Execute(frame *rtda.Frame) {
 	stack.PushInt(result)
 }
 
+// Boolean OR long
 type LOR struct{ base.NoOperandsInstruction }
 
 func (self *LOR) Execute(frame *rtda.Frame) {

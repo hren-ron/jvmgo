@@ -1,19 +1,9 @@
-
-
-/**
-
-布尔运算指令只能操作int和long变量，分为按位与（and）、按位
-或（or）、按位异或（xor）3种。
-*/
-
 package math
 
-import (
-	"jvmgo/ch05/instructions/base"
-	"jvmgo/ch05/rtda"
-)
+import "jvmgo/ch06/instructions/base"
+import "jvmgo/ch06/rtda"
 
-// 按位与
+// Boolean AND int
 type IAND struct{ base.NoOperandsInstruction }
 
 func (self *IAND) Execute(frame *rtda.Frame) {
@@ -24,6 +14,7 @@ func (self *IAND) Execute(frame *rtda.Frame) {
 	stack.PushInt(result)
 }
 
+// Boolean AND long
 type LAND struct{ base.NoOperandsInstruction }
 
 func (self *LAND) Execute(frame *rtda.Frame) {

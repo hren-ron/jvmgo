@@ -1,8 +1,6 @@
 package classfile
 
 /*
-LineNumberTable属性表存放方法的行号信息
-
 LineNumberTable_attribute {
     u2 attribute_name_index;
     u4 attribute_length;

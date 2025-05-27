@@ -1,20 +1,21 @@
 package math
 
-import "jvmgo/ch05/instructions/base"
-import "jvmgo/ch05/rtda"
+import "jvmgo/ch06/instructions/base"
+import "jvmgo/ch06/rtda"
 
-type ISUB struct{ base.NoOperandsInstruction }
-type FSUB struct{ base.NoOperandsInstruction }
-type LSUB struct{ base.NoOperandsInstruction }
+// Subtract double
 type DSUB struct{ base.NoOperandsInstruction }
 
-func (self *ISUB) Execute(frame *rtda.Frame) {
+func (self *DSUB) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
-	v2 := stack.PopInt()
-	v1 := stack.PopInt()
+	v2 := stack.PopDouble()
+	v1 := stack.PopDouble()
 	result := v1 - v2
-	stack.PushInt(result)
+	stack.PushDouble(result)
 }
+
+// Subtract float
+type FSUB struct{ base.NoOperandsInstruction }
 
 func (self *FSUB) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
@@ -24,18 +25,24 @@ func (self *FSUB) Execute(frame *rtda.Frame) {
 	stack.PushFloat(result)
 }
 
+// Subtract int
+type ISUB struct{ base.NoOperandsInstruction }
+
+func (self *ISUB) Execute(frame *rtda.Frame) {
+	stack := frame.OperandStack()
+	v2 := stack.PopInt()
+	v1 := stack.PopInt()
+	result := v1 - v2
+	stack.PushInt(result)
+}
+
+// Subtract long
+type LSUB struct{ base.NoOperandsInstruction }
+
 func (self *LSUB) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
 	v2 := stack.PopLong()
 	v1 := stack.PopLong()
 	result := v1 - v2
 	stack.PushLong(result)
-}
-
-func (self *DSUB) Execute(frame *rtda.Frame) {
-	stack := frame.OperandStack()
-	v2 := stack.PopDouble()
-	v1 := stack.PopDouble()
-	result := v1 - v2
-	stack.PushDouble(result)
 }

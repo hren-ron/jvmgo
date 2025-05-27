@@ -1,14 +1,27 @@
 package control
 
-import "jvmgo/ch05/instructions/base"
-import "jvmgo/ch05/rtda"
+import "jvmgo/ch06/instructions/base"
+import "jvmgo/ch06/rtda"
 
+/*
+lookupswitch
+<0-3 byte pad>
+defaultbyte1
+defaultbyte2
+defaultbyte3
+defaultbyte4
+npairs1
+npairs2
+npairs3
+npairs4
+match-offset pairs...
+*/
+// Access jump table by key match and jump
 type LOOKUP_SWITCH struct {
 	defaultOffset int32
 	npairs        int32
 	matchOffsets  []int32
 }
-
 
 func (self *LOOKUP_SWITCH) FetchOperands(reader *base.BytecodeReader) {
 	reader.SkipPadding()
@@ -17,19 +30,11 @@ func (self *LOOKUP_SWITCH) FetchOperands(reader *base.BytecodeReader) {
 	self.matchOffsets = reader.ReadInt32s(self.npairs * 2)
 }
 
-/**
-matchOffsets有点像Map，它的key是case值，value是跳转偏移
-量。Execute（）方法先从操作数栈中弹出一个int变量，然后用它查找
-matchOffsets，看是否能找到匹配的key。如果能，则按照value给出的
-偏移量跳转，否则按照defaultOffset跳转。
-*/
-
 func (self *LOOKUP_SWITCH) Execute(frame *rtda.Frame) {
-	index := frame.OperandStack().PopInt()
-	var offset int
+	key := frame.OperandStack().PopInt()
 	for i := int32(0); i < self.npairs*2; i += 2 {
-		if self.matchOffsets[i] == index {
-			offset = int(self.matchOffsets[i+1])
+		if self.matchOffsets[i] == key {
+			offset := self.matchOffsets[i+1]
 			base.Branch(frame, int(offset))
 			return
 		}

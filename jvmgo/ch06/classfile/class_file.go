@@ -23,33 +23,14 @@ ClassFile {
 }
 */
 type ClassFile struct {
-	// 很多文件格式都会规定满足该格式的文件必须以某几个固定字节开头，这几个字节主要起标识作用，叫作魔数（magic number）
 	//magic      uint32
-	// 版本号 魔数之后是class文件的次版本号和主版本号，都是u2类型。假设某class文件的主版本号是M，次版本号是m，那么完整的版本号可以表示成“M.m”的形式。
-	// 主版本号是class文件的版本号，次版本号是class文件修改次数
-	/**
-	特定的Java虚拟机实现只能支持版本号在某个范围内的class文
-件。Oracle的实现是完全向后兼容的，比如Java SE 8支持版本号为
-45.0~52.0的class文件。如果版本号不在支持的范围内，Java虚拟机
-实现就抛出java.lang.UnsupportedClassVersionError异常。
-	*/
 	minorVersion uint16
 	majorVersion uint16
 	constantPool ConstantPool
-	// 类的访问标志
 	accessFlags  uint16
-	/** 类访问标志之后是两个u2类型的常量池索引，分别给出类名
-和超类名。class文件存储的类名类似完全限定名，但是把点换成了
-斜线，Java语言规范把这种名字叫作二进制名（binary names）。因为
-每个类都有名字，所以thisClass必须是有效的常量池索引。除
-java.lang.Object之外，其他类都有超类，所以superClass只在
-Object.class中是0，在其他class文件中必须是有效的常量池索引。
-*/
 	thisClass    uint16
 	superClass   uint16
-	// 类和超类索引后面是接口索引表，表中存放的也是常量池索引，给出该类实现的所有接口的名字。
 	interfaces   []uint16
-	// 接口索引表之后是字段表和方法表，分别存储字段和方法信息。字段和方法的基本结构大致相同，差别仅在于属性表。
 	fields       []*MemberInfo
 	methods      []*MemberInfo
 	attributes   []AttributeInfo
@@ -98,7 +79,7 @@ func (self *ClassFile) readAndCheckVersion(reader *ClassReader) {
 	switch self.majorVersion {
 	case 45:
 		return
-	case 46, 47, 48, 49, 50, 51, 52, 55:
+	case 46, 47, 48, 49, 50, 51, 52:
 		if self.minorVersion == 0 {
 			return
 		}

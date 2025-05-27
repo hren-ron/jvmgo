@@ -1,7 +1,7 @@
 package math
 
-import "jvmgo/ch05/instructions/base"
-import "jvmgo/ch05/rtda"
+import "jvmgo/ch06/instructions/base"
+import "jvmgo/ch06/rtda"
 
 // Divide double
 type DDIV struct{ base.NoOperandsInstruction }
@@ -25,6 +25,7 @@ func (self *FDIV) Execute(frame *rtda.Frame) {
 	stack.PushFloat(result)
 }
 
+// Divide int
 type IDIV struct{ base.NoOperandsInstruction }
 
 func (self *IDIV) Execute(frame *rtda.Frame) {
@@ -34,10 +35,12 @@ func (self *IDIV) Execute(frame *rtda.Frame) {
 	if v2 == 0 {
 		panic("java.lang.ArithmeticException: / by zero")
 	}
+
 	result := v1 / v2
 	stack.PushInt(result)
 }
 
+// Divide long
 type LDIV struct{ base.NoOperandsInstruction }
 
 func (self *LDIV) Execute(frame *rtda.Frame) {
@@ -47,6 +50,7 @@ func (self *LDIV) Execute(frame *rtda.Frame) {
 	if v2 == 0 {
 		panic("java.lang.ArithmeticException: / by zero")
 	}
+
 	result := v1 / v2
 	stack.PushLong(result)
 }

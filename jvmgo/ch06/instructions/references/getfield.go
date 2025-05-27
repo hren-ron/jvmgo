@@ -4,24 +4,27 @@ import "jvmgo/ch06/instructions/base"
 import "jvmgo/ch06/rtda"
 import "jvmgo/ch06/rtda/heap"
 
-// Get static field from class
-type GET_STATIC struct{ base.Index16Instruction }
+// Fetch field from object
+type GET_FIELD struct{ base.Index16Instruction }
 
-func (self *GET_STATIC) Execute(frame *rtda.Frame) {
+func (self *GET_FIELD) Execute(frame *rtda.Frame) {
 	cp := frame.Method().Class().ConstantPool()
 	fieldRef := cp.GetConstant(self.Index).(*heap.FieldRef)
 	field := fieldRef.ResolvedField()
-	class := field.Class()
-	// todo: init class
 
-	if !field.IsStatic() {
+	if field.IsStatic() {
 		panic("java.lang.IncompatibleClassChangeError")
+	}
+
+	stack := frame.OperandStack()
+	ref := stack.PopRef()
+	if ref == nil {
+		panic("java.lang.NullPointerException")
 	}
 
 	descriptor := field.Descriptor()
 	slotId := field.SlotId()
-	slots := class.StaticVars()
-	stack := frame.OperandStack()
+	slots := ref.Fields()
 
 	switch descriptor[0] {
 	case 'Z', 'B', 'C', 'S', 'I':

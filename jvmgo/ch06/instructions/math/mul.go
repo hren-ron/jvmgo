@@ -1,28 +1,21 @@
 package math
 
-import "jvmgo/ch05/instructions/base"
-import "jvmgo/ch05/rtda"
+import "jvmgo/ch06/instructions/base"
+import "jvmgo/ch06/rtda"
 
-type IMUL struct{ base.NoOperandsInstruction }
-type LMUL struct{ base.NoOperandsInstruction }
-type FMUL struct{ base.NoOperandsInstruction }
+// Multiply double
 type DMUL struct{ base.NoOperandsInstruction }
 
-func (self *IMUL) Execute(frame *rtda.Frame) {
+func (self *DMUL) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
-	v2 := stack.PopInt()
-	v1 := stack.PopInt()
+	v2 := stack.PopDouble()
+	v1 := stack.PopDouble()
 	result := v1 * v2
-	stack.PushInt(result)
+	stack.PushDouble(result)
 }
 
-func (self *LMUL) Execute(frame *rtda.Frame) {
-	stack := frame.OperandStack()
-	v2 := stack.PopLong()
-	v1 := stack.PopLong()
-	result := v1 * v2
-	stack.PushLong(result)
-}
+// Multiply float
+type FMUL struct{ base.NoOperandsInstruction }
 
 func (self *FMUL) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
@@ -32,10 +25,24 @@ func (self *FMUL) Execute(frame *rtda.Frame) {
 	stack.PushFloat(result)
 }
 
-func (self *DMUL) Execute(frame *rtda.Frame) {
+// Multiply int
+type IMUL struct{ base.NoOperandsInstruction }
+
+func (self *IMUL) Execute(frame *rtda.Frame) {
 	stack := frame.OperandStack()
-	v2 := stack.PopDouble()
-	v1 := stack.PopDouble()
+	v2 := stack.PopInt()
+	v1 := stack.PopInt()
 	result := v1 * v2
-	stack.PushDouble(result)
+	stack.PushInt(result)
+}
+
+// Multiply long
+type LMUL struct{ base.NoOperandsInstruction }
+
+func (self *LMUL) Execute(frame *rtda.Frame) {
+	stack := frame.OperandStack()
+	v2 := stack.PopLong()
+	v1 := stack.PopLong()
+	result := v1 * v2
+	stack.PushLong(result)
 }
