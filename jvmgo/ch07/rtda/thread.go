@@ -1,6 +1,6 @@
 package rtda
 
-import "jvmgo/ch06/rtda/heap"
+import "jvmgo/ch07/rtda/heap"
 
 /*
 JVM
