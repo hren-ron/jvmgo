@@ -1,12 +1,13 @@
 package heap
 
-import "jvmgo/ch06/classfile"
+import "jvmgo/ch07/classfile"
 
 type Method struct {
 	ClassMember
 	maxStack  uint
 	maxLocals uint
 	code      []byte
+	argSlotCount uint
 }
 
 func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
@@ -16,6 +17,7 @@ func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
 		methods[i].class = class
 		methods[i].copyMemberInfo(cfMethod)
 		methods[i].copyAttributes(cfMethod)
+		methods[i].calcArgSlotCount()
 	}
 	return methods
 }
@@ -56,4 +58,23 @@ func (self *Method) MaxLocals() uint {
 }
 func (self *Method) Code() []byte {
 	return self.code
+}
+
+func (self *Method) ArgSlotCount() uint {
+	return self.argSlotCount
+}
+
+func (self *Method) calcArgSlotCount() { 
+	parsedDescriptor := parseMethodDescriptor(self.descriptor)
+	for _, paramType := range parsedDescriptor.parameterTypes {
+		self.argSlotCount++
+		// long和double需要两个slot
+		if paramType == "J" || paramType == "D" {
+			self.argSlotCount++
+		}
+	}
+	// 如果不是静态方法，则第一个参数为this
+	if !self.IsStatic() {
+		self.argSlotCount++
+	}
 }
